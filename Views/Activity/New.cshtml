@@ -1,0 +1,55 @@
+@model CBeltExam.Models.Activity
+<h1>Dojo Activity Center</h1>
+<p><a href="/dashboard">Home</a> | <a href="/logout">Log Out</a></p>
+<form asp-action="Create" asp-controller="Activity" method="post">
+    <div class="form-group">
+        <span asp-validation-for="Title"></span>
+        <label asp-for="Title"></label>
+        <input class="form-control" asp-for="Title">
+    </div>
+    <label asp-for="Hour"></label>
+    <select asp-for="Hour">
+        <option value="01">1</option>
+        <option value="02">2</option>
+        <option value="03">3</option>
+        <option value="04">4</option>
+        <option value="05">5</option>
+        <option value="06">6</option>
+        <option value="07">7</option>
+        <option value="08">8</option>
+        <option value="09">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+    </select>
+    <div class="form-group">
+            <span asp-validation-for="Time"></span>
+            <label asp-for="Time"></label>
+            <input class="form-control" asp-for="Time">
+        </div>
+    <select asp-for="AmPm">
+        <option value="AM">AM</option>
+        <option value="PM">PM</option>
+    </select>
+    <div class="form-group">
+        <span asp-validation-for="Date"></span>
+        <label asp-for="Date"></label>
+        <input class="form-control" asp-for="Date">
+    </div>
+    <div class="form-group">
+        <span asp-validation-for="Duration"></span>
+        <label asp-for="Duration"></label>
+        <input class="form-control" asp-for="Duration">
+    </div>
+    <select asp-for="DurType">
+        <option value="Hours">Hours</option>
+        <option value="Days">Days</option>
+        <option value="Minutes">Minutes</option>
+    </select>
+    <div class="form-group">
+        <span asp-validation-for="Description"></span>
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" rows="6" cols="30"></textarea>
+    </div>
+    <input type="submit" value="Create Activity">
+</form>

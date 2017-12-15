@@ -1,0 +1,71 @@
+<h1>Dojo Activity Center</h1>
+<p>Welcome @ViewBag.curUser.FirstName | <a href="/logout">Log Out</a></p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Activity</th>
+            <th>Date and Time</th>
+            <th>Duration</th>
+            <th>Event Coordinator</th>
+            <th>Number of Participants</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach(var item in ViewBag.activities){
+                if(item.Date > DateTime.Now){
+                    <tr>
+                        @{
+                            <td><a href="/dashboard/show/@item.id">@item.Title</a></td>
+                            <td>@item.Date.ToString("MM/dd/yyyy @ h:mm tt")</td>
+                            <td>@item.Duration @item.DurType</td>
+                            <td>@item.Coordinator</td>
+                            <td>@item.RSVPs.Count</td>
+                            if(ViewBag.curUser.id == item.creatorId){
+                                <td><a href="/dashboard/delete/@item.id">Delete</a></td>
+                            } else{
+                                bool found = false;
+                                foreach(var thing in item.RSVPs){
+                                    if(thing.UserId == ViewBag.curUser.id && !found){
+                                        <td><a href="/dashboard/unrsvp/@item.id">Leave</a></td>
+                                        found = true;
+                                    }
+                                }
+                                if(!found){
+                                    if(ViewBag.curUser.RSVPs.Count == 0){
+                                        <td><a href="/dashboard/rsvp/@item.id">Join</a></td>
+                                    }
+                                    bool conflict = false;
+                                    foreach(var activity in ViewBag.curUser.RSVPs){
+                                        if(activity.Activity.DurType == "Hours"){
+                                            if(activity.Activity.Date < item.Date && activity.Activity.Date.AddHours(activity.Activity.Duration) > item.Date || item.Date < activity.Activity.Date && item.Date.AddHours(item.Duration) > activity.Activity.Date){
+                                                <td>Too Bad time conflict</td>
+                                                conflict = true;
+                                            }
+                                        } else if (activity.Activity.DurType =="Minutes"){
+                                            if(activity.Activity.Date < item.Date && activity.Activity.Date.AddHours(activity.Activity.Duration) > item.Date || item.Date < activity.Activity.Date && item.Date.AddHours(item.Duration) > activity.Activity.Date){
+                                                <td>Too Bad time conflict</td>
+                                                conflict = true;
+                                            }
+                                        } else if (activity.Activity.DurType == "Days"){
+                                            if(activity.Activity.Date < item.Date && activity.Activity.Date.AddDays(activity.Activity.Duration) > item.Date || item.Date < activity.Activity.Date && item.Date.AddDays(item.Duration) > activity.Activity.Date){
+                                                <td>Too Bad time conflict</td>
+                                                conflict = true;
+                                            } 
+                                        } 
+                                    }
+                                    if (!(conflict)){
+                                            <td><a href="/dashboard/rsvp/item.id">Join</a></td>
+                                        }
+                                }
+                            }
+                        }
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+<a href="/dashboard/new"><button>Add New Activity</button></a>

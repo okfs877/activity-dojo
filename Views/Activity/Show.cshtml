@@ -1,0 +1,28 @@
+<h1>Dojo Activity Center</h1>
+<p><a href="/dashboard">Home</a> | <a href="/logout">Log Out</a></p>
+<h2>@ViewBag.activity.Title</h2>
+@{
+    if(ViewBag.curUser.id == ViewBag.activity.creatorId){
+        <button><a href="/dashboard/delete/@ViewBag.activity.id">Delete</a></button>
+    } else{
+        bool found = false;
+        foreach(var thing in @ViewBag.activity.RSVPs){
+            if(thing.UserId == ViewBag.curUser.id && !found){
+                <button><a href="/dashboard/unrsvp2/@ViewBag.activity.id">Leave</a></button>
+                found = true;
+            }
+        }
+        if(!found){
+            <button><a href="/dashboard/rsvp2/@ViewBag.activity.id">Join</a></button>
+        }
+    }
+}
+<p>Event Coordinator: @ViewBag.activity.Coordinator</p>
+<p>Description: </p>
+    <p>@ViewBag.activity.Description</p>
+<p>Guests:</p>
+@foreach(var guest in ViewBag.activity.RSVPs){
+    if(guest.id != ViewBag.activity.creatorId){
+        <p>@guest.User.FirstName</p>
+    }
+}
